@@ -6,17 +6,22 @@ pipeline {
         docker { image 'maven:3.8.1-adoptopenjdk-11' }
       }
       steps {
-        public class HelloWorld {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
-}
+        script {
+          // Corrected: Java code should be in a separate source file
+          writeFile file: 'src/main/java/HelloWorld.java', text: '''
+          public class HelloWorld {
+              public static void main(String[] args) {
+                  System.out.println("Hello, World!");
+              }
+          }
+          '''
+        }
         sh 'mvn clean install'
       }
     }
     stage('Front-end') {
       agent {
-        docker { image 'node:19-alpine' }
+        docker { image 'node:14-alpine' } // Corrected: Specify a valid Node.js version
       }
       steps {
         sh 'node --version'
